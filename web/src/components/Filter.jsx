@@ -12,10 +12,10 @@ export default function Filter({ selectedGenre, setSelectedGenre }) {
 
 
     return (
-        <aside>
-            <h3 className='pb-1 border-b w-fit border-black/30'>Filter By Genre</h3>
+        <aside className=''>
+            <p className='pb-1 border-b w-fit border-black/30 font-bold uppercase'>Filter By Genre</p>
 
-            <ul className='pt-8'>
+            <ul className='pt-4 flex flex-col gap-2'>
                 <li>All</li>
                 {genres.map((genre) => (
                     <li

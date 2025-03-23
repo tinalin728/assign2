@@ -42,42 +42,42 @@ export default function AddMovieContent({ onClose, onMovieAdded }) {
     };
 
     return (
-        <div className='grid place-items-center'>
-            <div className='max-w-xl border p-10 relative w-full' >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className='max-w-xl rounded p-10 relative w-full bg-white' >
                 <button onClick={onClose} className='absolute top-4 right-10 text-2xl'>x</button>
 
                 <h3 className='text-xl font-bol text-center'>Add a new movie</h3>
 
                 <form onSubmit={handleSubmit} encType="multipart/form-data" className='mt-6 grid gap-1'>
                     <label>Genre: </label>
-                    <select value={genre} onChange={(e) => setGenre(e.target.value)} className='border px-2 py-1'>
+                    <select value={genre} onChange={(e) => setGenre(e.target.value)} className='border px-2 py-1 rounded'>
                         {genres.map((g) => (
                             <option key={g.id} value={g.id}>{g.name}</option>
                         ))}
                     </select>
 
                     <label className='mt-4'>Movie Title:</label>
-                    <input className='border focus:outline-none placeholder:text-sm px-2 py-1'
+                    <input className='border focus:outline-none placeholder:text-sm px-2 py-1 rounded'
                         placeholder='Enter Movie Title'
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)} required />
 
                     <label className='mt-4'>Description:</label>
-                    <textarea className='border focus:outline-none placeholder:text-sm px-2 py-1'
+                    <textarea className='border focus:outline-none placeholder:text-sm px-2 py-1 rounded'
                         placeholder='Enter Movie Description'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)} required />
 
                     <label className='mt-4'> Release Year:</label>
-                    <input className='border px-2 py-1'
+                    <input className='border px-2 py-1 rounded'
                         type="number"
                         value={releaseYear} onChange={(e) => setReleaseYear(e.target.value)} required />
 
                     <div className="mt-4 relative flex items-center gap-4">
                         <label className="block ">Upload Cover:</label>
 
-                        <label className="bg-gray-800 text-white px-2 py-1 cursor-pointer hover:bg-gray-700">
+                        <label className="bg-gray-800 text-white px-2 py-1 cursor-pointer rounded hover:bg-gray-700">
                             Choose Image
                             <input
                                 type="file"
@@ -93,7 +93,7 @@ export default function AddMovieContent({ onClose, onMovieAdded }) {
                         )}
                     </div>
 
-                    <button type="submit" className='mt-10 border px-4 py-2'>Add Now</button>
+                    <button type="submit" className='mt-10 border px-4 py-2 rounded'>Add Now</button>
                 </form>
             </div>
         </div>

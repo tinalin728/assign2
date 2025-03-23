@@ -8,7 +8,7 @@ export default function AddMovieModal({ onMovieAdded }) {
 
     return (
         <>
-            <button className='px-4 py-2 border'
+            <button className='px-4 py-2 border rounded'
                 onClick={() => setShowModal(true)}
             >
                 Add Movie
