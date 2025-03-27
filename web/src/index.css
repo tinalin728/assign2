@@ -6,5 +6,34 @@
 }
 
 .max-w-container {
-  @apply max-w-[80rem] px-6 mx-auto
+  @apply max-w-[80rem] px-4 md:px-6 mx-auto w-full
+}
+
+button {
+  @apply cursor-pointer
+}
+
+
+@keyframes scale-shake {
+
+  0%,
+  100% {
+    transform: scale(.9) rotate(0deg);
+  }
+
+  25% {
+    transform: scale(1) rotate(-5deg);
+  }
+
+  50% {
+    transform: scale(0.95) rotate(5deg);
+  }
+
+  75% {
+    transform: scale(1.02) rotate(-3deg);
+  }
+}
+
+.animate-scale-shake {
+  animation: scale-shake 1s infinite ease-in-out;
 }

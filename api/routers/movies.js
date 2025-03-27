@@ -5,13 +5,22 @@ const db = require('../db');
 
 // GET all movies with genre names
 moviesRouter.get("/", (req, res) => {
-    const sql = `
+    const genreId = req.query.genre;
+
+    let sql = `
     SELECT movies.*, genres.name AS genre
     FROM movies
     JOIN genres ON movies.genre_id = genres.id
   `;
 
-    db.query(sql, (err, results) => {
+    const params = [];
+
+    if (genreId) {
+        sql += " WHERE movies.genre_id = ?";
+        params.push(genreId);
+    }
+
+    db.query(sql, params, (err, results) => {
         if (err) {
             res.status(500).send(err);
             return;

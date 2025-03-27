@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom';
 import Filter from '../components/Filter'
 import AddMovieModal from '../components/AddMovieModal';
 import UpdateMovieModal from '../components/UpdateMovieModal';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 export default function Movies() {
 
     const [movies, setMovies] = useState([]);
     const [selectedGenre, setSelectedGenre] = useState(null);
+    const [genreRefreshKey, setGenreRefreshKey] = useState(0);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [toDelete, setToDelete] = useState(null);
 
     const fetchMovies = () => {
         const url = selectedGenre
@@ -28,8 +32,6 @@ export default function Movies() {
     }, [selectedGenre]);
 
     const handleDelete = async (id) => {
-        const confirm = window.confirm("Are you sure you want to delete this movie?");
-        if (!confirm) return;
 
         try {
             const response = await fetch(`http://localhost:3001/api/movies/${id}`, {
@@ -48,20 +50,22 @@ export default function Movies() {
 
 
     return (
-        <main className='max-w-container mt-10'>
-            <div className='grid grid-cols-12 gap-10 min-h-screen'>
-                <div className='col-span-2 border rounded border-gray-200 px-4 py-2'>
-                    <Filter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} />
+        <main className="w-full md:mt-10 md:max-w-[80rem] md:px-6 mx-auto">
+            <div className='grid md:grid-cols-12 gap-6 md:gap-10 min-h-screen'>
+                <div className='w-full md:col-span-3 lg:col-span-2 border-b md:border md:rounded border-gray-200 md:px-3 py-2'>
+                    <Filter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} refreshTrigger={genreRefreshKey} />
                 </div>
 
-                <div className='col-span-10'>
+                <div className='px-4 md:px-0 w-full md:col-span-9 lg:col-span-10'>
                     <div className='flex justify-between items-center border-b pb-3 border-gray-200 '>
-                        <h3 className='font-bold text-xl uppercase tracking-wide'>My Collection</h3>
+                        <h3 className='font-bold text-lg md:text-xl uppercase tracking-wide'>My Collection</h3>
 
-                        <AddMovieModal onMovieAdded={fetchMovies} />
+                        <AddMovieModal onMovieAdded={fetchMovies} setGenreRefreshKey={setGenreRefreshKey}
+                        />
                     </div>
 
 
+                    {/* movies */}
                     <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
                         {movies.map(movie => (
                             <div
@@ -69,10 +73,23 @@ export default function Movies() {
                                 className="bg-white shadow rounded overflow-hidden border border-gray-200 p-4 flex flex-col justify-between relative"
                             >
                                 <button className='z-10 absolute top-5 right-5 text-lg bg-white/60 backdrop-blur-sm shadow-lg h-8 w-8 rounded-full leading-0'
-                                    onClick={() => handleDelete(movie.id)}
+                                    onClick={() => {
+                                        setToDelete(movie.id);
+                                        setShowConfirm(true);
+                                    }}
                                 >
                                     X
                                 </button>
+                                {showConfirm && (
+                                    <ConfirmDeleteModal
+                                        onClose={() => setShowConfirm(false)}
+                                        onConfirm={() => {
+                                            handleDelete(toDelete);
+                                            setShowConfirm(false);
+                                        }}
+                                    />
+                                )}
+
 
                                 <div>
                                     <img
@@ -102,7 +119,6 @@ export default function Movies() {
                     </div>
                 </div>
             </div>
-
         </main >
     )
 }
