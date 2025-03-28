@@ -66,29 +66,32 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
                 <h3 className="text-xl font-bold mb-4 text-center">Edit Movie</h3>
 
                 <form onSubmit={handleSubmit} encType="multipart/form-data" className="grid gap-4">
-                    <div>
-                        <label className="block mb-1">Genre:</label>
-                        <select
-                            value={genre}
-                            onChange={(e) => setGenre(e.target.value)}
-                            className="border w-full px-2 py-1"
-                        >
-                            {genres.map((g) => (
-                                <option key={g.id} value={g.id}>{g.name}</option>
-                            ))}
-                        </select>
+                    <div className="flex items-center justify-center gap-4">
+                        <div className="basis-1/3">
+                            <label className="block mb-1">Genre:</label>
+                            <select
+                                value={genre}
+                                onChange={(e) => setGenre(e.target.value)}
+                                className="border w-full px-2 py-[5px]"
+                            >
+                                {genres.map((g) => (
+                                    <option key={g.id} value={g.id}>{g.name}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="flex-1">
+                            <label className="block mb-1">Title:</label>
+                            <input
+                                className="border w-full px-2 py-1"
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block mb-1">Title:</label>
-                        <input
-                            className="border w-full px-2 py-1"
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                        />
-                    </div>
 
                     <div>
                         <label className="block mb-1">Description:</label>
@@ -138,7 +141,7 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
 
                     <button
                         type="submit"
-                        className='mt-10 border px-4 py-2'
+                        className='mt-10 border px-4 py-2 hover:bg-gray-100'
                     >
                         Save Changes
                     </button>

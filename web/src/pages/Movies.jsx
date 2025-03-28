@@ -64,7 +64,7 @@ export default function Movies() {
 
 
     return (
-        <main className="w-full md:my-10 md:max-w-[80rem] md:px-6 mx-auto">
+        <main className="w-full mb-10 md:my-10 md:max-w-[80rem] md:px-6 mx-auto">
             <div className='grid md:grid-cols-12 gap-6 md:gap-10 min-h-screen'>
                 <div className='w-full h-fit md:col-span-3 lg:col-span-2 border-b md:border md:rounded border-gray-200 md:px-3 py-2'>
                     {/* Genre Filter Section */}

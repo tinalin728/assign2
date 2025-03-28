@@ -27,7 +27,7 @@ export default function Filter({ selectedGenre, setSelectedGenre, refreshTrigger
 
 
             {/* Genre List */}
-            <ul className={`pt-4 flex-col w-full gap-2 justify-center items-center ${isOpen ? 'flex w-full' : 'hidden md:block'}`}>
+            <ul className={`pt-4 flex-col w-full gap-3 justify-center items-center ${isOpen ? 'flex w-full' : 'hidden md:flex md:flex-col md:items-start md:pb-4'}`}>
                 <li
                     onClick={() => setSelectedGenre(null)}
                     className={`cursor-pointer hover:underline ${selectedGenre === null ? 'font-bold text-black' : 'text-gray-500'}`}
