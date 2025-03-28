@@ -1,4 +1,4 @@
-// storage.js
+// Set up file upload handling with multer
 const multer = require('multer');
 const path = require('path');
 
@@ -15,6 +15,6 @@ const storage = multer.diskStorage({
     }
 });
 
-// Export the multer middleware
+// Export the upload multer middleware
 const upload = multer({ storage });
 module.exports = upload;

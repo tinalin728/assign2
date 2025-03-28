@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const port = 3001;
 
+// Import route handlers
 const moviesRouter = require('./routers/movies');
 const genresRouter = require('./routers/genres');
 
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 // Static folder for uploaded posters
 app.use('/uploads', express.static('uploads'));
 
-// Use routers
+// Use movie and genre routes
 app.use('/api/movies', moviesRouter);
 app.use('/api/genres', genresRouter);
 

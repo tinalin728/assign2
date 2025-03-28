@@ -3,29 +3,40 @@ import { useState, useEffect } from 'react';
 
 
 export default function AddMovieContent({ onClose, onMovieAdded, setGenreRefreshKey }) {
+    // State to store genres from the database
     const [genres, setGenres] = useState([]);
-    const [genre, setGenre] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [releaseYear, setReleaseYear] = useState('');
-    const [poster, setPoster] = useState('');
+
+    // Tracks user input for movie fields
+    const [genre, setGenre] = useState('');  // selected genre ID
+    const [title, setTitle] = useState(''); //movie title
+    const [description, setDescription] = useState(''); // movie description
+    const [releaseYear, setReleaseYear] = useState(''); // movie year
+    const [poster, setPoster] = useState(''); //uploaded image file
+
+    // Handles whether the user is adding a new genre
     const [isNewGenre, setIsNewGenre] = useState(false);
     const [newGenre, setNewGenre] = useState("");
 
+    // Fetch genres from the server when the component mounts
     useEffect(() => {
         fetch('http://localhost:3001/api/genres')
             .then(res => res.json())
             .then(data => {
                 setGenres(data);
+                // Set default genre if movie has none (fallback)
                 if (data.length > 0) setGenre(data[0].id);
             });
     }, []);
 
+    // Handle form submission for updating movie
     const handleSubmit = async (e) => {
+        // Stop default form reload
         e.preventDefault();
 
+        // start with selected genre
         let genre_id = genre;
 
+        // If user typed in a new genre, send it to backend first
         if (isNewGenre && newGenre.trim() !== "") {
             const genreResponse = await fetch("http://localhost:3001/api/genres", {
                 method: "POST",
@@ -34,10 +45,13 @@ export default function AddMovieContent({ onClose, onMovieAdded, setGenreRefresh
             });
 
             const genreData = await genreResponse.json();
-            genre_id = genreData.id;
+            genre_id = genreData.id; // use newly created genre's ID
         }
+
+        // triggers genre re-fetch / will refresh genre list in the UI after adding a new one
         setGenreRefreshKey(prev => prev + 1);
 
+        //create form data to send with the POST request
         const formData = new FormData();
         formData.append('genre_id', genre_id);
         formData.append('title', title);
@@ -45,16 +59,20 @@ export default function AddMovieContent({ onClose, onMovieAdded, setGenreRefresh
         formData.append('release_year', releaseYear);
         formData.append('poster', poster);
 
+        // Send movie data to the backend
         const response = await fetch('http://localhost:3001/api/movies', {
             method: 'POST',
             body: formData,
         });
 
         const result = await response.json();
-        console.log('New movie:', result);
+        // console.log('New movie:', result);
 
-        onMovieAdded(); // Refresh movies
-        onClose(); // Close modal
+        // Refresh movie list on the UI
+        onMovieAdded();
+
+        // Close the modal after submission
+        onClose();
     };
 
     return (

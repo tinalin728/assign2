@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
+
+    // Store genre options and current form field values
     const [genres, setGenres] = useState([]);
     const [genre, setGenre] = useState(movie.genre_id);
     const [title, setTitle] = useState(movie.title);
@@ -8,6 +10,7 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
     const [releaseYear, setReleaseYear] = useState(movie.release_year);
     const [poster, setPoster] = useState(null); // New file upload
 
+    // Fetch genres from the server when component loads
     useEffect(() => {
         fetch("http://localhost:3001/api/genres")
             .then((res) => res.json())
@@ -19,18 +22,23 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
             });
     }, []);
 
+    // Handle form submission to update movie
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Create form data to send to server
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
         formData.append("release_year", releaseYear);
         formData.append("genre_id", genre);
+
+        // Only include image if user uploaded a new one
         if (poster) {
             formData.append("poster", poster);
         }
 
+        // Send PUT request to update movie info
         const res = await fetch(`http://localhost:3001/api/movies/${movie.id}`, {
             method: "PUT",
             body: formData,
@@ -39,7 +47,9 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
         const result = await res.json();
         console.log(result);
 
+        // Refresh the movie list
         onMovieUpdated();
+        // Close the modal
         onClose();
     };
 

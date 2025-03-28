@@ -1,36 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-
 import Filter from '../components/Filter'
 import AddMovieModal from '../components/AddMovieModal';
 import UpdateMovieModal from '../components/UpdateMovieModal';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 export default function Movies() {
-
+    // Store the list of movies
     const [movies, setMovies] = useState([]);
+
+    // Store the selected genre 
     const [selectedGenre, setSelectedGenre] = useState(null);
+
+    // This is used to re-fetch genres when a new genre is added
     const [genreRefreshKey, setGenreRefreshKey] = useState(0);
+
+    // States for handling the delete confirmation modal
     const [showConfirm, setShowConfirm] = useState(false);
     const [toDelete, setToDelete] = useState(null);
 
+    // Fetch movies from the server
     const fetchMovies = () => {
+
+        // If a genre is selected, include it in the API request
         const url = selectedGenre
             ? `http://localhost:3001/api/movies?genre=${selectedGenre}`
             : `http://localhost:3001/api/movies`;
 
+        // Fetch movies from the API
         fetch(url)
             .then(res => res.json())
             .then((jsonData) => {
-                console.log(jsonData);
+                // console.log(jsonData);
+
+                // Save movies to state
                 setMovies(jsonData);
             });
     };
 
+    // Run fetchMovies every time selectedGenre changes
     useEffect(() => {
         fetchMovies();
     }, [selectedGenre]);
 
+    // Delete movie after confirmation
     const handleDelete = async (id) => {
 
         try {
@@ -39,6 +52,7 @@ export default function Movies() {
             });
 
             if (response.ok) {
+                // Refresh movie list after delete
                 fetchMovies();
             } else {
                 console.error("Failed to delete movie");
@@ -50,9 +64,10 @@ export default function Movies() {
 
 
     return (
-        <main className="w-full md:mt-10 md:max-w-[80rem] md:px-6 mx-auto">
+        <main className="w-full md:my-10 md:max-w-[80rem] md:px-6 mx-auto">
             <div className='grid md:grid-cols-12 gap-6 md:gap-10 min-h-screen'>
-                <div className='w-full md:col-span-3 lg:col-span-2 border-b md:border md:rounded border-gray-200 md:px-3 py-2'>
+                <div className='w-full h-fit md:col-span-3 lg:col-span-2 border-b md:border md:rounded border-gray-200 md:px-3 py-2'>
+                    {/* Genre Filter Section */}
                     <Filter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} refreshTrigger={genreRefreshKey} />
                 </div>
 
@@ -60,6 +75,7 @@ export default function Movies() {
                     <div className='flex justify-between items-center border-b pb-3 border-gray-200 '>
                         <h3 className='font-bold text-lg md:text-xl uppercase tracking-wide'>My Collection</h3>
 
+                        {/* Button to open the Add Movie modal */}
                         <AddMovieModal onMovieAdded={fetchMovies} setGenreRefreshKey={setGenreRefreshKey}
                         />
                     </div>
@@ -120,5 +136,6 @@ export default function Movies() {
                 </div>
             </div>
         </main >
+
     )
 }

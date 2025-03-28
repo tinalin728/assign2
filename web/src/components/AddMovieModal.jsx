@@ -5,6 +5,7 @@ import star from "../../public/star.png"
 
 export default function AddMovieModal({ onMovieAdded, setGenreRefreshKey }) {
 
+    // State to control whether the modal is shown
     const [showModal, setShowModal] = useState(false);
 
     return (
