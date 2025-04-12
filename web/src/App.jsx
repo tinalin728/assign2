@@ -6,8 +6,6 @@ import Footer from './components/Footer';
 
 import authRequired from './authRequired';
 
-import SignUp from './pages/SignUp';
-import SignIn from './pages/SignIn';
 import Movies from './pages/Movies';
 import SingleMovie from './pages/SingleMovie';
 import Home from './pages/Home';
@@ -22,11 +20,31 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
 
+  const fetchUser = () => {
+    const token = localStorage.getItem("jwt-token");
+    if (!token) return;
+
+    fetch("http://localhost:3001/api/users/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsAuthenticated(true);
+        setUsername(data.username);
+      })
+      .catch((err) => console.error("Failed to fetch user info:", err));
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const handleLogin = (name) => {
     setIsAuthenticated(true);
     navigate("/movies");
     setUsername(name);
+    fetchUser();
   };
 
   const handleLogout = () => {
@@ -39,20 +57,33 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt-token");
-    const savedUsername = localStorage.getItem("username");
-    if (token) {
-      setIsAuthenticated(true);
-      setUsername(savedUsername);
-    }
+
+    if (!token) return;
+
+    fetch("http://localhost:3001/api/users/me", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsAuthenticated(true);
+        setUsername(data.username);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch user info:", err);
+      });
+
   }, []);
+
+
 
   return (
     <div>
       <Header handleLogout={handleLogout} isAuthenticated={isAuthenticated} username={username} />
       <Routes>
         <Route path="/" element={<Home handleLogin={handleLogin} />} />
-        {/* <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/sign-in" element={<SignIn handleLogin={handleLogin} />} /> */}
+
         <Route path="/movies" element={<ProtectedMovies />} />
         <Route path="/movies/:id" element={<ProtectedSingleMovie />} />
 

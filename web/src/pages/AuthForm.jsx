@@ -51,26 +51,16 @@ function AuthForm({ handleLogin }) {
 
             if (mode === "login") {
                 localStorage.setItem("jwt-token", data.jwt);
-                localStorage.setItem("username", data.username); // 🆕
+                handleLogin();
                 navigate("/movies");
-                handleLogin(data.username); // 🆕
-            } else {
-                // Auto login after signup
-                const loginRes = await fetch("http://localhost:3001/api/users/sign-in", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password }),
-                });
-                const loginData = await loginRes.json();
 
-                if (loginRes.ok) {
-                    localStorage.setItem("jwt-token", loginData.jwt);
-                    localStorage.setItem("username", loginData.username || ""); // 🆕
-                    navigate("/movies");
-                    handleLogin(loginData.username); // 🆕
-                } else {
-                    setError("Account created, but login failed. Please try logging in.");
-                }
+            } else {
+                setMode("login");
+                setEmail("");
+                setPassword("");
+                setConfirm("");
+                setUsername("");
+                setError("Account created! Please log in.");
             }
         } catch (err) {
             setError("Server error. Try again later.");

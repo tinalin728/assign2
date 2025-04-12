@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../db");
+const verifyToken = require("../middleware/auth.jwt");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const usersRouter = express.Router();
@@ -62,6 +63,18 @@ usersRouter.post("/sign-in", (req, res) => {
         );
 
         res.json({ message: "Success!", jwt: token });
+    });
+});
+
+usersRouter.get("/me", verifyToken, (req, res) => {
+    const userId = req.user.userId;
+
+    db.query("SELECT username FROM users WHERE id = ?", [userId], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(500).json({ message: "User not found" });
+        }
+
+        res.json({ username: results[0].username });
     });
 });
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import user from '../../public/user.png'
 
 export default function Header({ isAuthenticated, handleLogout, username }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -15,9 +16,10 @@ export default function Header({ isAuthenticated, handleLogout, username }) {
                     {isAuthenticated ? (
                         <div className="relative">
                             <button
-                                className="bg-black text-white px-4 py-1 rounded hover:bg-gray-800 transition"
+                                className="flex items-center gap-2"
                                 onClick={() => setDropdownOpen((prev) => !prev)}
                             >
+                                <img src={user} alt="" width={30} />
                                 {username}
                             </button>
 
@@ -25,8 +27,7 @@ export default function Header({ isAuthenticated, handleLogout, username }) {
                                 <div className="absolute right-0 mt-2 bg-white border rounded shadow p-2 z-50">
                                     <button
                                         onClick={handleLogout}
-                                        className="text-sm text-red-600 hover:underline"
-                                    >
+                                        className="text-red-600 hover:underline text-nowrap" >
                                         Log Out
                                     </button>
                                 </div>
