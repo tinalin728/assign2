@@ -1,12 +1,36 @@
-# React + Vite
+# 🎬 Movie Library App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application where users can sign up, log in, and manage their personal movie collection. Each user has their own private list, protected by JWT authentication.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **Frontend**: React + TailwindCSS
+- **Backend**: Node.js + Express
+- **Database**: MySQL (via phpMyAdmin / MAMP)
+- **Authentication**: JSON Web Tokens (JWT)
+- **File Upload**: Multer
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Setup Instructions
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+### 1. Database Setup Instructions
+1. Open MAMP and go to phpMyAdmin.
+2. Click New to create a database named "movies"
+3. After the database is created, click into it.
+4. Go to the Import tab.
+5. Choose the provided .sql file you exported.
+6. Click Go to import the tables and data.
+
+This will set up all the required tables (e.g., users, movies, genres) and any data included in the export.
+
+### 2. Backend setup (API)
+cd api
+npm install
+Then run the server
+
+
+### 3. Frontend setup (Web)
+cd ../web
+npm install
+npm run dev

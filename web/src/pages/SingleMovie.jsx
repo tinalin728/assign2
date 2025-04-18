@@ -10,11 +10,23 @@ export default function SingleMovie() {
 
     // Fetch movie data when component mounts or ID changes
     useEffect(() => {
-        fetch(`http://localhost:3001/api/movies/${id}`)
-            .then((res) => res.json())
+        const token = localStorage.getItem("jwt-token");
+
+        fetch(`http://localhost:3001/api/movies/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch movie data");
+                }
+                return res.json();
+            })
             .then((data) => setMovieData(data))
             .catch((err) => console.error(err));
     }, [id]);
+
 
 
     // Show loading message while data is being fetched

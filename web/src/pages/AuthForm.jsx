@@ -6,7 +6,7 @@ function AuthForm({ handleLogin }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
-    const [username, setUsername] = useState(""); // 🆕
+    const [username, setUsername] = useState("");
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ function AuthForm({ handleLogin }) {
         const body =
             mode === "login"
                 ? { email, password }
-                : { email, password, username }; // 🆕
+                : { email, password, username };
 
         try {
             const res = await fetch(endpoint, {
@@ -45,7 +45,7 @@ function AuthForm({ handleLogin }) {
             const data = await res.json();
 
             if (!res.ok) {
-                setError(data.errors?.[0]?.msg || data.message || "Something went wrong");
+                setError(data.errors?.[0]?.msg || data.message || "Oops, something went wrong");
                 return;
             }
 

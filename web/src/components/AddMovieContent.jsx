@@ -19,14 +19,21 @@ export default function AddMovieContent({ onClose, onMovieAdded, setGenreRefresh
 
     // Fetch genres from the server when the component mounts
     useEffect(() => {
-        fetch('http://localhost:3001/api/genres')
+        const token = localStorage.getItem("jwt-token");
+
+        fetch('http://localhost:3001/api/genres', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setGenres(data);
-                // Set default genre if movie has none (fallback)
                 if (data.length > 0) setGenre(data[0].id);
-            });
+            })
+            .catch(err => console.error("Failed to fetch genres:", err));
     }, []);
+
 
     // Handle form submission for updating movie
     const handleSubmit = async (e) => {
@@ -36,17 +43,22 @@ export default function AddMovieContent({ onClose, onMovieAdded, setGenreRefresh
         // start with selected genre
         let genre_id = genre;
 
-        // If user typed in a new genre, send it to backend first
         if (isNewGenre && newGenre.trim() !== "") {
+            const token = localStorage.getItem("jwt-token"); // 🔥 get the token
+
             const genreResponse = await fetch("http://localhost:3001/api/genres", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`, // 🔥 send it
+                },
                 body: JSON.stringify({ new_genre: newGenre })
             });
 
             const genreData = await genreResponse.json();
             genre_id = genreData.id; // use newly created genre's ID
         }
+
 
         // triggers genre re-fetch / will refresh genre list in the UI after adding a new one
         setGenreRefreshKey(prev => prev + 1);
@@ -60,10 +72,16 @@ export default function AddMovieContent({ onClose, onMovieAdded, setGenreRefresh
         formData.append('poster', poster);
 
         // Send movie data to the backend
+        const token = localStorage.getItem("jwt-token");
+
         const response = await fetch('http://localhost:3001/api/movies', {
             method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             body: formData,
         });
+
 
         const result = await response.json();
         // console.log('New movie:', result);

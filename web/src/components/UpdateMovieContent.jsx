@@ -12,15 +12,21 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
 
     // Fetch genres from the server when component loads
     useEffect(() => {
-        fetch("http://localhost:3001/api/genres")
-            .then((res) => res.json())
-            .then((data) => {
+        const token = localStorage.getItem("jwt-token");
+
+        fetch('http://localhost:3001/api/genres', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
                 setGenres(data);
-                if (data.length > 0 && !genre) {
-                    setGenre(data[0].id);
-                }
-            });
+                if (data.length > 0) setGenre(data[0].id);
+            })
+            .catch(err => console.error("Failed to fetch genres:", err));
     }, []);
+
 
     // Handle form submission to update movie
     const handleSubmit = async (e) => {
@@ -39,10 +45,16 @@ export default function UpdateMovieContent({ movie, onClose, onMovieUpdated }) {
         }
 
         // Send PUT request to update movie info
+        const token = localStorage.getItem("jwt-token");
+
         const res = await fetch(`http://localhost:3001/api/movies/${movie.id}`, {
             method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             body: formData,
         });
+
 
         const result = await res.json();
         console.log(result);

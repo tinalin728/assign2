@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import user from '../../public/user.png'
 
 export default function Header({ isAuthenticated, handleLogout, username }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
     return (
         <header className="border-b border-black/20">
@@ -14,7 +29,7 @@ export default function Header({ isAuthenticated, handleLogout, username }) {
                     </Link>
 
                     {isAuthenticated ? (
-                        <div className="relative">
+                        <div className="relative" ref={dropdownRef}>
                             <button
                                 className="flex items-center gap-2"
                                 onClick={() => setDropdownOpen((prev) => !prev)}
@@ -26,7 +41,10 @@ export default function Header({ isAuthenticated, handleLogout, username }) {
                             {dropdownOpen && (
                                 <div className="absolute right-0 mt-2 bg-white border rounded shadow p-2 z-50">
                                     <button
-                                        onClick={handleLogout}
+                                        onClick={() => {
+                                            setDropdownOpen(false);
+                                            handleLogout();
+                                        }}
                                         className="text-red-600 hover:underline text-nowrap" >
                                         Log Out
                                     </button>

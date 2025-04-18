@@ -2,14 +2,27 @@ import React, { useEffect, useState } from 'react';
 
 export default function Filter({ selectedGenre, setSelectedGenre, refreshTrigger }) {
     const [genres, setGenres] = useState([]);
-    const [isOpen, setIsOpen] = useState(false); // Toggle for mobile view
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/genres')
-            .then(res => res.json())
-            .then(data => setGenres(data))
-            .catch(err => console.error('Failed to load genres:', err));
+        const token = localStorage.getItem("jwt-token");
+
+        fetch("http://localhost:3001/api/genres", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => {
+                if (!res.ok) throw new Error("Unauthorized");
+                return res.json();
+            })
+            .then((data) => setGenres(data))
+            .catch((err) => {
+                console.error("Failed to load genres:", err);
+            });
     }, [refreshTrigger]);
+
+
 
     return (
         <div className="w-full">
