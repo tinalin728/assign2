@@ -86,7 +86,7 @@ function AuthForm({ handleLogin }) {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {mode === "signup" && ( // 🆕
+                    {mode === "signup" && ( 
                         <input
                             type="text"
                             placeholder="Username"
